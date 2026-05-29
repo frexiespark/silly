@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spec labz</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06060a;
+    --panel: rgba(10,10,20,0.8);
+    --border: rgba(255,255,255,0.07);
+    --cyan: #00f0ff;
+    --magenta: #ff2aff;
+    --yellow: #ffe600;
+    --text: #c8d0e0;
+    --dim: #3a4a6a;
+  }
+ 
+  * { margin:0; padding:0; box-sizing:border-box; }
+ 
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+ 
+  /* subtle grid bg */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,240,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events:none; z-index:0;
+  }
+ 
+  .wrap {
+    position:relative; z-index:1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 24px 80px;
+  }
+ 
+  header { margin-bottom: 64px; }
+ 
+  header .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+ 
+  header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    text-shadow: 0 0 30px rgba(0,240,255,0.5);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+ 
+  header p {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    max-width: 420px;
+    line-height: 1.8;
+  }
+ 
+  /* ---- section label ---- */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content:'';
+    flex:1; height:1px;
+    background: var(--border);
+  }
+ 
+  /* ---- grid ---- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+ 
+  /* ---- card ---- */
+  .card {
+    display: block;
+    text-decoration: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    backdrop-filter: blur(10px);
+  }
+ 
+  .card::before {
+    content:'';
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, var(--accent-color, var(--cyan)) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+ 
+  .card:hover { 
+    border-color: var(--accent-color, var(--cyan));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px color-mix(in srgb, var(--accent-color, var(--cyan)) 20%, transparent);
+  }
+  .card:hover::before { opacity: 0.04; }
+ 
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-color, var(--cyan));
+    margin-bottom: 10px;
+    opacity: 0.7;
+  }
+ 
+  .card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin-bottom: 8px;
+    text-shadow: 0 0 12px color-mix(in srgb, var(--accent-color, var(--cyan)) 40%, transparent);
+  }
+ 
+  .card-desc {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+ 
+  .card-arrow {
+    position: absolute;
+    bottom: 18px; right: 18px;
+    font-size: 14px;
+    color: var(--accent-color, var(--cyan));
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .card:hover .card-arrow { opacity: 1; transform: translateX(0); }
+ 
+  /* ---- coming soon card ---- */
+  .card.soon {
+    opacity: 0.4;
+    pointer-events: none;
+    border-style: dashed;
+  }
+  .card.soon .card-title { color: var(--dim); text-shadow:none; }
+ 
+  footer {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #1e2a3a;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+ 
+  <header>
+    <div class="eyebrow">frostspark / projects</div>
+    <h1>FREX'S LAB</h1>
+    <p>a collection of browser toys, games, and experiments. new stuff drops regularly.</p>
+  </header>
+ 
+  <div class="section-label">projects</div>
+ 
+  <!--
+    =====================================================
+    TO ADD A PROJECT: copy one <a class="card"> block,
+    paste it inside .grid, and fill in:
+      - href         → path to your html file
+      - --accent-color → any neon hex you like
+      - card-tag     → short category label
+      - card-title   → project name
+      - card-desc    → one-line description
+    =====================================================
+  -->
+  <div class="grid">
+ 
+    <a class="card" href="https://frexiespark.github.io/xyn-flock" style="--accent-color:#00f0ff">
+      <div class="card-tag">simulation</div>
+      <div class="card-title">DAY 1: FLOCK</div>
+      <div class="card-desc">the birds be going crazy. cmy flocks of birds hunt each other. chase don't bug it out</div>
+      <div class="card-arrow">→</div>
+    </a>
+ 
+    <a class="card" href="https://frexiespark.github.io/xyn-dodge" style="--accent-color:#ff2aff">
+      <div class="card-tag">game</div>
+      <div class="card-title">DAY 2: DODGE</div>
+      <div class="card-desc">the bullets are too much | a lil bullet hell game you can play while idling finals</div>
+      <div class="card-arrow">→</div>
+    </a>
+ 
+    <!-- COMING SOON placeholder — remove this when you add project 3 -->
+    <a class="card soon" href="#" style="--accent-color:#ffe600">
+      <div class="card-tag">???</div>
+      <div class="card-title">COMING SOON</div>
+      <div class="card-desc">something new is coming...sometime soon...</div>
+    </a>
+ 
+  </div>
+ 
+  <footer>spec · visit @spectrispark on yt · built-in html experiments · new drop every day</footer>
+ 
+</div>
+</body>
+</html>
